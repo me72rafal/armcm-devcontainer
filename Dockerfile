@@ -44,10 +44,17 @@ RUN ln -s ${DOTNET_INSTALL_DIR}/dotnet-info.sh ${DOTNET_INSTALL_DIR}/dotnet
 ENV PATH=$PATH:${DOTNET_INSTALL_DIR}
 
 #- Arm GNU Toolchain -----------------------------------------------------------
+#ARG TOOLCHAIN_VERSION=15.3.rel1
+#ARG TOOLCHAIN_URL="https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages/generic/gnu-toolchain/$TOOLCHAIN_VERSION/arm-gnu-toolchain-$TOOLCHAIN_VERSION-x86_64-arm-none-eabi.tar.xz"
+#ARG TOOLCHAIN_MD5="bbe1e4bf65591692ed93cd19706c93af"
+#ARG TOOLCHAIN_INSTALL_DIR="/opt/gcc-arm-none-eabi"
+
+
 ARG TOOLCHAIN_VERSION=15.3.rel1
 ARG TOOLCHAIN_URL="https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages/generic/gnu-toolchain/$TOOLCHAIN_VERSION/arm-gnu-toolchain-$TOOLCHAIN_VERSION-x86_64-arm-none-eabi.tar.xz"
 ARG TOOLCHAIN_MD5="bbe1e4bf65591692ed93cd19706c93af"
 ARG TOOLCHAIN_INSTALL_DIR="/opt/gcc-arm-none-eabi"
+
 
 # Dependencies setup
 RUN apt-get update && \
@@ -65,6 +72,18 @@ RUN curl -sLO ${TOOLCHAIN_URL} && \
     rm $(basename "${TOOLCHAIN_URL}")
 COPY gcc-arm-none-eabi.cmake ${TOOLCHAIN_INSTALL_DIR}
 ENV PATH=$PATH:${TOOLCHAIN_INSTALL_DIR}/bin
+
+#  Download and install cc65
+ARG CC65_VERSION=2.19
+ARG CC65_URL="https://github.com/cc65/cc65/archive/refs/tags/V2.19.zip"
+ARG CC65_INSTALL_DIR="/opt/cc65"
+RUN curl -sLO ${CC65_URL} && \
+    mkdir -p ${CC65_INSTALL_DIR} && \
+    unzip $(basename "${CC65_URL}") -d ${CC65_INSTALL_DIR} && \
+    rm $(basename "${CC65_URL}") && \
+    cd ${CC65_INSTALL_DIR}/cc65-${CC65_VERSION} && \ 
+    make
+ENV PATH=$PATH:${CC65_INSTALL_DIR}/cc65-${CC65_VERSION}/bin
 
 #- JLink Debugger --------------------------------------------------------------
 ARG JLINK_VERSION=964

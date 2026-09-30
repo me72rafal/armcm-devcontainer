@@ -10,6 +10,7 @@
 * [SEGGER J-Link Software](https://www.segger.com/downloads/jlink/) Version 9.64
 * [xPack OpenOCD](https://github.com/xpack-dev-tools/openocd-xpack) Version 0.12.0-7
 * [CMake](https://cmake.org/download) Version 4.4.2
+* [CC65] (https://cc65.github.io/) Version 2.19
 
 ## System Requirements
 * VSCode [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
